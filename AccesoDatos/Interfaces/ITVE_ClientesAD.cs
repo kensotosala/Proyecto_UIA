@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AccesoDatos.Interfaces
 {
-    internal interface ITVE_ClientesAD
+    public interface ITVE_ClientesAD
     {
         // --- Entidades ---
         List<TVE_Clientes> obtenerClientes_ENT();
