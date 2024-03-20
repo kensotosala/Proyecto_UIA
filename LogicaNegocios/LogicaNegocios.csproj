@@ -41,6 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementacion\TVET_CitasLN.cs" />
+    <Compile Include="Implementacion\TVET_DetalleMascotaLN.cs" />
+    <Compile Include="Implementacion\TVET_DiagnosticoLN.cs" />
+    <Compile Include="Implementacion\TVET_MascotasLN.cs" />
+    <Compile Include="Implementacion\TVE_ClientesLN.cs" />
+    <Compile Include="Interfaces\ITVET_CitasLN.cs" />
+    <Compile Include="Interfaces\ITVET_DetalleMascotaLN.cs" />
+    <Compile Include="Interfaces\ITVET_DiagnosticoLN.cs" />
+    <Compile Include="Interfaces\ITVET_MascotasLN.cs" />
+    <Compile Include="Interfaces\ITVE_ClientesLN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,9 +63,6 @@
       <Name>Entidades</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementacion\" />
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
