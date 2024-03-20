@@ -1,0 +1,812 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VETModelo.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TVE_Clientes">
+          <Key>
+            <PropertyRef Name="TN_IdCliente" />
+          </Key>
+          <Property Name="TN_IdCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TC_Nombre" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="TC_Ap1" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="TC_Ap2" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="TC_NumTelefono" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TC_CorreoElectronico" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TVET_Citas">
+          <Key>
+            <PropertyRef Name="TN_IdCita" />
+          </Key>
+          <Property Name="TN_IdCita" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TN_IdCliente" Type="int" />
+          <Property Name="TN_IdMascota" Type="int" />
+          <Property Name="TF_FecCita" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TVET_DetalleMascota">
+          <Key>
+            <PropertyRef Name="TN_IdMascota" />
+          </Key>
+          <Property Name="TN_IdMascota" Type="int" Nullable="false" />
+          <Property Name="TC_Raza" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TN_Peso" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TC_Color" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TVET_Diagnostico">
+          <Key>
+            <PropertyRef Name="TN_IdDiagnostico" />
+          </Key>
+          <Property Name="TN_IdDiagnostico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TN_IdCita" Type="int" />
+          <Property Name="TC_DscDiagnostico" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TVET_Mascotas">
+          <Key>
+            <PropertyRef Name="TN_IdMascota" />
+          </Key>
+          <Property Name="TN_IdMascota" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TC_NombreMascota" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TN_IdCliente" Type="int" />
+        </EntityType>
+        <Association Name="FK__TVET_Cita__TN_Id__4F47C5E3">
+          <End Role="TVE_Clientes" Type="Self.TVE_Clientes" Multiplicity="0..1" />
+          <End Role="TVET_Citas" Type="Self.TVET_Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVE_Clientes">
+              <PropertyRef Name="TN_IdCliente" />
+            </Principal>
+            <Dependent Role="TVET_Citas">
+              <PropertyRef Name="TN_IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Cita__TN_Id__503BEA1C">
+          <End Role="TVET_Mascotas" Type="Self.TVET_Mascotas" Multiplicity="0..1" />
+          <End Role="TVET_Citas" Type="Self.TVET_Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVET_Mascotas">
+              <PropertyRef Name="TN_IdMascota" />
+            </Principal>
+            <Dependent Role="TVET_Citas">
+              <PropertyRef Name="TN_IdMascota" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Deta__TN_Id__31B762FC">
+          <End Role="TVET_Mascotas" Type="Self.TVET_Mascotas" Multiplicity="1" />
+          <End Role="TVET_DetalleMascota" Type="Self.TVET_DetalleMascota" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TVET_Mascotas">
+              <PropertyRef Name="TN_IdMascota" />
+            </Principal>
+            <Dependent Role="TVET_DetalleMascota">
+              <PropertyRef Name="TN_IdMascota" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Diag__TN_Id__0D44F85C">
+          <End Role="TVET_Citas" Type="Self.TVET_Citas" Multiplicity="0..1" />
+          <End Role="TVET_Diagnostico" Type="Self.TVET_Diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVET_Citas">
+              <PropertyRef Name="TN_IdCita" />
+            </Principal>
+            <Dependent Role="TVET_Diagnostico">
+              <PropertyRef Name="TN_IdCita" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Masc__TN_Id__2EDAF651">
+          <End Role="TVE_Clientes" Type="Self.TVE_Clientes" Multiplicity="0..1" />
+          <End Role="TVET_Mascotas" Type="Self.TVET_Mascotas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVE_Clientes">
+              <PropertyRef Name="TN_IdCliente" />
+            </Principal>
+            <Dependent Role="TVET_Mascotas">
+              <PropertyRef Name="TN_IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="EditarCita" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCita" Type="int" Mode="In" />
+          <Parameter Name="IdCliente" Type="int" Mode="In" />
+          <Parameter Name="IdMascota" Type="int" Mode="In" />
+          <Parameter Name="FechaCita" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="EditarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Apellido1" Type="varchar" Mode="In" />
+          <Parameter Name="Apellido2" Type="varchar" Mode="In" />
+          <Parameter Name="NumTelefono" Type="varchar" Mode="In" />
+          <Parameter Name="CorreoElectronico" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="EditarDetalles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMascota" Type="int" Mode="In" />
+          <Parameter Name="Raza" Type="varchar" Mode="In" />
+          <Parameter Name="Peso" Type="decimal" Mode="In" />
+          <Parameter Name="Color" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="EditarDiagnostico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDiagnostico" Type="int" Mode="In" />
+          <Parameter Name="IdCita" Type="int" Mode="In" />
+          <Parameter Name="DescripcionDiagnostico" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="EditarMascota" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMascota" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdCliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EliminarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EliminarDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDetalle" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EliminarDiagnostico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdDiagnostico" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EliminarMascota" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMascota" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="InsertarCita" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCliente" Type="int" Mode="In" />
+          <Parameter Name="IdMascota" Type="int" Mode="In" />
+          <Parameter Name="FecCita" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="InsertarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Apellido1" Type="varchar" Mode="In" />
+          <Parameter Name="Apellido2" Type="varchar" Mode="In" />
+          <Parameter Name="NumTelefono" Type="varchar" Mode="In" />
+          <Parameter Name="CorreoElectronico" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertarDetalles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMascota" Type="int" Mode="In" />
+          <Parameter Name="Raza" Type="varchar" Mode="In" />
+          <Parameter Name="Peso" Type="decimal" Mode="In" />
+          <Parameter Name="Color" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertarDiagnostico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCita" Type="int" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertarMascota" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdCliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="LLenarCbxClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LLenarCbxDiagnosticos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LlenarCombobox" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LLenarComboboxDetalles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LlenarComboboxMascotas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MostrarCitas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MostrarClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MostrarDetallesMascotas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MostrarDiagnosticos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MostrarMascotas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="VETModeloStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TVE_Clientes" EntityType="Self.TVE_Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TVET_Citas" EntityType="Self.TVET_Citas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TVET_DetalleMascota" EntityType="Self.TVET_DetalleMascota" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TVET_Diagnostico" EntityType="Self.TVET_Diagnostico" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TVET_Mascotas" EntityType="Self.TVET_Mascotas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__TVET_Cita__TN_Id__4F47C5E3" Association="Self.FK__TVET_Cita__TN_Id__4F47C5E3">
+            <End Role="TVE_Clientes" EntitySet="TVE_Clientes" />
+            <End Role="TVET_Citas" EntitySet="TVET_Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Cita__TN_Id__503BEA1C" Association="Self.FK__TVET_Cita__TN_Id__503BEA1C">
+            <End Role="TVET_Mascotas" EntitySet="TVET_Mascotas" />
+            <End Role="TVET_Citas" EntitySet="TVET_Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Deta__TN_Id__31B762FC" Association="Self.FK__TVET_Deta__TN_Id__31B762FC">
+            <End Role="TVET_Mascotas" EntitySet="TVET_Mascotas" />
+            <End Role="TVET_DetalleMascota" EntitySet="TVET_DetalleMascota" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Diag__TN_Id__0D44F85C" Association="Self.FK__TVET_Diag__TN_Id__0D44F85C">
+            <End Role="TVET_Citas" EntitySet="TVET_Citas" />
+            <End Role="TVET_Diagnostico" EntitySet="TVET_Diagnostico" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Masc__TN_Id__2EDAF651" Association="Self.FK__TVET_Masc__TN_Id__2EDAF651">
+            <End Role="TVE_Clientes" EntitySet="TVE_Clientes" />
+            <End Role="TVET_Mascotas" EntitySet="TVET_Mascotas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VETModelo" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TVE_Clientes">
+          <Key>
+            <PropertyRef Name="TN_IdCliente" />
+          </Key>
+          <Property Name="TN_IdCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TC_Nombre" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TC_Ap1" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TC_Ap2" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TC_NumTelefono" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TC_CorreoElectronico" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TVET_Citas" Relationship="Self.FK__TVET_Cita__TN_Id__4F47C5E3" FromRole="TVE_Clientes" ToRole="TVET_Citas" />
+          <NavigationProperty Name="TVET_Mascotas" Relationship="Self.FK__TVET_Masc__TN_Id__2EDAF651" FromRole="TVE_Clientes" ToRole="TVET_Mascotas" />
+        </EntityType>
+        <EntityType Name="TVET_Citas">
+          <Key>
+            <PropertyRef Name="TN_IdCita" />
+          </Key>
+          <Property Name="TN_IdCita" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TN_IdCliente" Type="Int32" />
+          <Property Name="TN_IdMascota" Type="Int32" />
+          <Property Name="TF_FecCita" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="TVE_Clientes" Relationship="Self.FK__TVET_Cita__TN_Id__4F47C5E3" FromRole="TVET_Citas" ToRole="TVE_Clientes" />
+          <NavigationProperty Name="TVET_Mascotas" Relationship="Self.FK__TVET_Cita__TN_Id__503BEA1C" FromRole="TVET_Citas" ToRole="TVET_Mascotas" />
+          <NavigationProperty Name="TVET_Diagnostico" Relationship="Self.FK__TVET_Diag__TN_Id__0D44F85C" FromRole="TVET_Citas" ToRole="TVET_Diagnostico" />
+        </EntityType>
+        <EntityType Name="TVET_DetalleMascota">
+          <Key>
+            <PropertyRef Name="TN_IdMascota" />
+          </Key>
+          <Property Name="TN_IdMascota" Type="Int32" Nullable="false" />
+          <Property Name="TC_Raza" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TN_Peso" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TC_Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TVET_Mascotas" Relationship="Self.FK__TVET_Deta__TN_Id__31B762FC" FromRole="TVET_DetalleMascota" ToRole="TVET_Mascotas" />
+        </EntityType>
+        <EntityType Name="TVET_Diagnostico">
+          <Key>
+            <PropertyRef Name="TN_IdDiagnostico" />
+          </Key>
+          <Property Name="TN_IdDiagnostico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TN_IdCita" Type="Int32" />
+          <Property Name="TC_DscDiagnostico" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TVET_Citas" Relationship="Self.FK__TVET_Diag__TN_Id__0D44F85C" FromRole="TVET_Diagnostico" ToRole="TVET_Citas" />
+        </EntityType>
+        <EntityType Name="TVET_Mascotas">
+          <Key>
+            <PropertyRef Name="TN_IdMascota" />
+          </Key>
+          <Property Name="TN_IdMascota" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TC_NombreMascota" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TN_IdCliente" Type="Int32" />
+          <NavigationProperty Name="TVE_Clientes" Relationship="Self.FK__TVET_Masc__TN_Id__2EDAF651" FromRole="TVET_Mascotas" ToRole="TVE_Clientes" />
+          <NavigationProperty Name="TVET_Citas" Relationship="Self.FK__TVET_Cita__TN_Id__503BEA1C" FromRole="TVET_Mascotas" ToRole="TVET_Citas" />
+          <NavigationProperty Name="TVET_DetalleMascota" Relationship="Self.FK__TVET_Deta__TN_Id__31B762FC" FromRole="TVET_Mascotas" ToRole="TVET_DetalleMascota" />
+        </EntityType>
+        <Association Name="FK__TVET_Cita__TN_Id__4F47C5E3">
+          <End Role="TVE_Clientes" Type="Self.TVE_Clientes" Multiplicity="0..1" />
+          <End Role="TVET_Citas" Type="Self.TVET_Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVE_Clientes">
+              <PropertyRef Name="TN_IdCliente" />
+            </Principal>
+            <Dependent Role="TVET_Citas">
+              <PropertyRef Name="TN_IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Masc__TN_Id__2EDAF651">
+          <End Role="TVE_Clientes" Type="Self.TVE_Clientes" Multiplicity="0..1" />
+          <End Role="TVET_Mascotas" Type="Self.TVET_Mascotas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVE_Clientes">
+              <PropertyRef Name="TN_IdCliente" />
+            </Principal>
+            <Dependent Role="TVET_Mascotas">
+              <PropertyRef Name="TN_IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Cita__TN_Id__503BEA1C">
+          <End Role="TVET_Mascotas" Type="Self.TVET_Mascotas" Multiplicity="0..1" />
+          <End Role="TVET_Citas" Type="Self.TVET_Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVET_Mascotas">
+              <PropertyRef Name="TN_IdMascota" />
+            </Principal>
+            <Dependent Role="TVET_Citas">
+              <PropertyRef Name="TN_IdMascota" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Diag__TN_Id__0D44F85C">
+          <End Role="TVET_Citas" Type="Self.TVET_Citas" Multiplicity="0..1" />
+          <End Role="TVET_Diagnostico" Type="Self.TVET_Diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TVET_Citas">
+              <PropertyRef Name="TN_IdCita" />
+            </Principal>
+            <Dependent Role="TVET_Diagnostico">
+              <PropertyRef Name="TN_IdCita" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TVET_Deta__TN_Id__31B762FC">
+          <End Role="TVET_Mascotas" Type="Self.TVET_Mascotas" Multiplicity="1" />
+          <End Role="TVET_DetalleMascota" Type="Self.TVET_DetalleMascota" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TVET_Mascotas">
+              <PropertyRef Name="TN_IdMascota" />
+            </Principal>
+            <Dependent Role="TVET_DetalleMascota">
+              <PropertyRef Name="TN_IdMascota" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VETEntidades" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TVE_Clientes" EntityType="Self.TVE_Clientes" />
+          <EntitySet Name="TVET_Citas" EntityType="Self.TVET_Citas" />
+          <EntitySet Name="TVET_DetalleMascota" EntityType="Self.TVET_DetalleMascota" />
+          <EntitySet Name="TVET_Diagnostico" EntityType="Self.TVET_Diagnostico" />
+          <EntitySet Name="TVET_Mascotas" EntityType="Self.TVET_Mascotas" />
+          <AssociationSet Name="FK__TVET_Cita__TN_Id__4F47C5E3" Association="Self.FK__TVET_Cita__TN_Id__4F47C5E3">
+            <End Role="TVE_Clientes" EntitySet="TVE_Clientes" />
+            <End Role="TVET_Citas" EntitySet="TVET_Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Masc__TN_Id__2EDAF651" Association="Self.FK__TVET_Masc__TN_Id__2EDAF651">
+            <End Role="TVE_Clientes" EntitySet="TVE_Clientes" />
+            <End Role="TVET_Mascotas" EntitySet="TVET_Mascotas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Cita__TN_Id__503BEA1C" Association="Self.FK__TVET_Cita__TN_Id__503BEA1C">
+            <End Role="TVET_Mascotas" EntitySet="TVET_Mascotas" />
+            <End Role="TVET_Citas" EntitySet="TVET_Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Diag__TN_Id__0D44F85C" Association="Self.FK__TVET_Diag__TN_Id__0D44F85C">
+            <End Role="TVET_Citas" EntitySet="TVET_Citas" />
+            <End Role="TVET_Diagnostico" EntitySet="TVET_Diagnostico" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TVET_Deta__TN_Id__31B762FC" Association="Self.FK__TVET_Deta__TN_Id__31B762FC">
+            <End Role="TVET_Mascotas" EntitySet="TVET_Mascotas" />
+            <End Role="TVET_DetalleMascota" EntitySet="TVET_DetalleMascota" />
+          </AssociationSet>
+          <FunctionImport Name="EditarCita">
+            <Parameter Name="IdCita" Mode="In" Type="Int32" />
+            <Parameter Name="IdCliente" Mode="In" Type="Int32" />
+            <Parameter Name="IdMascota" Mode="In" Type="Int32" />
+            <Parameter Name="FechaCita" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="EditarCliente">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido1" Mode="In" Type="String" />
+            <Parameter Name="Apellido2" Mode="In" Type="String" />
+            <Parameter Name="NumTelefono" Mode="In" Type="String" />
+            <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditarDetalles" ReturnType="Collection(Int32)">
+            <Parameter Name="IdMascota" Mode="In" Type="Int32" />
+            <Parameter Name="Raza" Mode="In" Type="String" />
+            <Parameter Name="Peso" Mode="In" Type="Decimal" />
+            <Parameter Name="Color" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditarDiagnostico">
+            <Parameter Name="IdDiagnostico" Mode="In" Type="Int32" />
+            <Parameter Name="IdCita" Mode="In" Type="Int32" />
+            <Parameter Name="DescripcionDiagnostico" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditarMascota" ReturnType="Collection(Int32)">
+            <Parameter Name="IdMascota" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdCliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarCliente">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarDetalle" ReturnType="Collection(Int32)">
+          <Parameter Name="IdDetalle" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarDiagnostico">
+          <Parameter Name="IdDiagnostico" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarMascota" ReturnType="Collection(Int32)">
+          <Parameter Name="IdMascota" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarCita">
+            <Parameter Name="IdCliente" Mode="In" Type="Int32" />
+            <Parameter Name="IdMascota" Mode="In" Type="Int32" />
+            <Parameter Name="FecCita" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarCliente">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido1" Mode="In" Type="String" />
+            <Parameter Name="Apellido2" Mode="In" Type="String" />
+            <Parameter Name="NumTelefono" Mode="In" Type="String" />
+            <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarDetalles">
+            <Parameter Name="IdMascota" Mode="In" Type="Int32" />
+            <Parameter Name="Raza" Mode="In" Type="String" />
+            <Parameter Name="Peso" Mode="In" Type="Decimal" />
+            <Parameter Name="Color" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarDiagnostico">
+            <Parameter Name="IdCita" Mode="In" Type="Int32" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarMascota" ReturnType="Collection(Int32)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdCliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="LLenarCbxClientes" ReturnType="Collection(VETModelo.LLenarCbxClientes_Result)" />
+          <FunctionImport Name="LLenarCbxDiagnosticos" ReturnType="Collection(VETModelo.LLenarCbxDiagnosticos_Result)" />
+          <FunctionImport Name="LlenarCombobox" ReturnType="Collection(VETModelo.LlenarCombobox_Result)" />
+          <FunctionImport Name="LLenarComboboxDetalles" ReturnType="Collection(VETModelo.LLenarComboboxDetalles_Result)" />
+          <FunctionImport Name="LlenarComboboxMascotas" ReturnType="Collection(VETModelo.LlenarComboboxMascotas_Result)">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MostrarCitas" ReturnType="Collection(VETModelo.MostrarCitas_Result)" />
+          <FunctionImport Name="MostrarClientes" ReturnType="Collection(VETModelo.MostrarClientes_Result)" />
+          <FunctionImport Name="MostrarDetallesMascotas" ReturnType="Collection(VETModelo.MostrarDetallesMascotas_Result)" />
+          <FunctionImport Name="MostrarDiagnosticos" ReturnType="Collection(VETModelo.MostrarDiagnosticos_Result)" />
+          <FunctionImport Name="MostrarMascotas" ReturnType="Collection(VETModelo.MostrarMascotas_Result)" />
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(VETModelo.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(VETModelo.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="LLenarCbxClientes_Result">
+          <Property Type="Int32" Name="TN_IdCliente" Nullable="false" />
+          <Property Type="String" Name="TC_Nombre" Nullable="false" MaxLength="60" />
+        </ComplexType>
+        <ComplexType Name="LLenarCbxDiagnosticos_Result">
+          <Property Type="Int32" Name="TN_IdCita" Nullable="false" />
+          <Property Type="String" Name="TC_NombreMascota" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="LlenarCombobox_Result">
+          <Property Type="Int32" Name="TN_IdCliente" Nullable="false" />
+          <Property Type="String" Name="TC_Nombre" Nullable="false" MaxLength="60" />
+        </ComplexType>
+        <ComplexType Name="LLenarComboboxDetalles_Result">
+          <Property Type="Int32" Name="TN_IdMascota" Nullable="false" />
+          <Property Type="String" Name="TC_NombreMascota" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="LlenarComboboxMascotas_Result">
+          <Property Type="Int32" Name="TN_IdMascota" Nullable="false" />
+          <Property Type="String" Name="TC_NombreMascota" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="TN_IdCliente" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="MostrarCitas_Result">
+          <Property Type="Int32" Name="IdCita" Nullable="false" />
+          <Property Type="String" Name="NombreCliente" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="NombreMascota" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="FechaCita" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="MostrarClientes_Result">
+          <Property Type="Int32" Name="TN_IdCliente" Nullable="false" />
+          <Property Type="String" Name="TC_Nombre" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="TC_Ap1" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="TC_Ap2" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="TC_NumTelefono" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="TC_CorreoElectronico" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="MostrarDetallesMascotas_Result">
+          <Property Type="Int32" Name="TN_IdMascota" Nullable="false" />
+          <Property Type="String" Name="TC_Raza" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="TN_Peso" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="String" Name="TC_Color" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="MostrarDiagnosticos_Result">
+          <Property Type="Int32" Name="TN_IdDiagnostico" Nullable="false" />
+          <Property Type="Int32" Name="TN_IdCita" Nullable="true" />
+          <Property Type="String" Name="TC_NombreMascota" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="TC_DscDiagnostico" Nullable="false" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="MostrarMascotas_Result">
+          <Property Type="Int32" Name="TN_IdMascota" Nullable="false" />
+          <Property Type="String" Name="TC_NombreMascota" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="TN_IdCliente" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VETModeloStoreContainer" CdmEntityContainer="VETEntidades">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="VETModelo.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TVE_Clientes">
+            <EntityTypeMapping TypeName="VETModelo.TVE_Clientes">
+              <MappingFragment StoreEntitySet="TVE_Clientes">
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+                <ScalarProperty Name="TC_Nombre" ColumnName="TC_Nombre" />
+                <ScalarProperty Name="TC_Ap1" ColumnName="TC_Ap1" />
+                <ScalarProperty Name="TC_Ap2" ColumnName="TC_Ap2" />
+                <ScalarProperty Name="TC_NumTelefono" ColumnName="TC_NumTelefono" />
+                <ScalarProperty Name="TC_CorreoElectronico" ColumnName="TC_CorreoElectronico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TVET_Citas">
+            <EntityTypeMapping TypeName="VETModelo.TVET_Citas">
+              <MappingFragment StoreEntitySet="TVET_Citas">
+                <ScalarProperty Name="TN_IdCita" ColumnName="TN_IdCita" />
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TF_FecCita" ColumnName="TF_FecCita" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TVET_DetalleMascota">
+            <EntityTypeMapping TypeName="VETModelo.TVET_DetalleMascota">
+              <MappingFragment StoreEntitySet="TVET_DetalleMascota">
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TC_Raza" ColumnName="TC_Raza" />
+                <ScalarProperty Name="TN_Peso" ColumnName="TN_Peso" />
+                <ScalarProperty Name="TC_Color" ColumnName="TC_Color" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TVET_Diagnostico">
+            <EntityTypeMapping TypeName="VETModelo.TVET_Diagnostico">
+              <MappingFragment StoreEntitySet="TVET_Diagnostico">
+                <ScalarProperty Name="TN_IdDiagnostico" ColumnName="TN_IdDiagnostico" />
+                <ScalarProperty Name="TN_IdCita" ColumnName="TN_IdCita" />
+                <ScalarProperty Name="TC_DscDiagnostico" ColumnName="TC_DscDiagnostico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TVET_Mascotas">
+            <EntityTypeMapping TypeName="VETModelo.TVET_Mascotas">
+              <MappingFragment StoreEntitySet="TVET_Mascotas">
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TC_NombreMascota" ColumnName="TC_NombreMascota" />
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="EditarCita" FunctionName="VETModelo.Store.EditarCita" />
+          <FunctionImportMapping FunctionImportName="EditarCliente" FunctionName="VETModelo.Store.EditarCliente" />
+          <FunctionImportMapping FunctionImportName="EditarDetalles" FunctionName="VETModelo.Store.EditarDetalles" />
+          <FunctionImportMapping FunctionImportName="EditarDiagnostico" FunctionName="VETModelo.Store.EditarDiagnostico" />
+          <FunctionImportMapping FunctionImportName="EditarMascota" FunctionName="VETModelo.Store.EditarMascota" />
+          <FunctionImportMapping FunctionImportName="EliminarCliente" FunctionName="VETModelo.Store.EliminarCliente" />
+          <FunctionImportMapping FunctionImportName="EliminarDetalle" FunctionName="VETModelo.Store.EliminarDetalle" />
+          <FunctionImportMapping FunctionImportName="EliminarDiagnostico" FunctionName="VETModelo.Store.EliminarDiagnostico" />
+          <FunctionImportMapping FunctionImportName="EliminarMascota" FunctionName="VETModelo.Store.EliminarMascota" />
+          <FunctionImportMapping FunctionImportName="InsertarCita" FunctionName="VETModelo.Store.InsertarCita" />
+          <FunctionImportMapping FunctionImportName="InsertarCliente" FunctionName="VETModelo.Store.InsertarCliente" />
+          <FunctionImportMapping FunctionImportName="InsertarDetalles" FunctionName="VETModelo.Store.InsertarDetalles" />
+          <FunctionImportMapping FunctionImportName="InsertarDiagnostico" FunctionName="VETModelo.Store.InsertarDiagnostico" />
+          <FunctionImportMapping FunctionImportName="InsertarMascota" FunctionName="VETModelo.Store.InsertarMascota" />
+          <FunctionImportMapping FunctionImportName="LLenarCbxClientes" FunctionName="VETModelo.Store.LLenarCbxClientes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.LLenarCbxClientes_Result">
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+                <ScalarProperty Name="TC_Nombre" ColumnName="TC_Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LLenarCbxDiagnosticos" FunctionName="VETModelo.Store.LLenarCbxDiagnosticos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.LLenarCbxDiagnosticos_Result">
+                <ScalarProperty Name="TN_IdCita" ColumnName="TN_IdCita" />
+                <ScalarProperty Name="TC_NombreMascota" ColumnName="TC_NombreMascota" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LlenarCombobox" FunctionName="VETModelo.Store.LlenarCombobox">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.LlenarCombobox_Result">
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+                <ScalarProperty Name="TC_Nombre" ColumnName="TC_Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LLenarComboboxDetalles" FunctionName="VETModelo.Store.LLenarComboboxDetalles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.LLenarComboboxDetalles_Result">
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TC_NombreMascota" ColumnName="TC_NombreMascota" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LlenarComboboxMascotas" FunctionName="VETModelo.Store.LlenarComboboxMascotas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.LlenarComboboxMascotas_Result">
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TC_NombreMascota" ColumnName="TC_NombreMascota" />
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MostrarCitas" FunctionName="VETModelo.Store.MostrarCitas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.MostrarCitas_Result">
+                <ScalarProperty Name="IdCita" ColumnName="IdCita" />
+                <ScalarProperty Name="NombreCliente" ColumnName="NombreCliente" />
+                <ScalarProperty Name="NombreMascota" ColumnName="NombreMascota" />
+                <ScalarProperty Name="FechaCita" ColumnName="FechaCita" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MostrarClientes" FunctionName="VETModelo.Store.MostrarClientes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.MostrarClientes_Result">
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+                <ScalarProperty Name="TC_Nombre" ColumnName="TC_Nombre" />
+                <ScalarProperty Name="TC_Ap1" ColumnName="TC_Ap1" />
+                <ScalarProperty Name="TC_Ap2" ColumnName="TC_Ap2" />
+                <ScalarProperty Name="TC_NumTelefono" ColumnName="TC_NumTelefono" />
+                <ScalarProperty Name="TC_CorreoElectronico" ColumnName="TC_CorreoElectronico" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MostrarDetallesMascotas" FunctionName="VETModelo.Store.MostrarDetallesMascotas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.MostrarDetallesMascotas_Result">
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TC_Raza" ColumnName="TC_Raza" />
+                <ScalarProperty Name="TN_Peso" ColumnName="TN_Peso" />
+                <ScalarProperty Name="TC_Color" ColumnName="TC_Color" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MostrarDiagnosticos" FunctionName="VETModelo.Store.MostrarDiagnosticos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.MostrarDiagnosticos_Result">
+                <ScalarProperty Name="TN_IdDiagnostico" ColumnName="TN_IdDiagnostico" />
+                <ScalarProperty Name="TN_IdCita" ColumnName="TN_IdCita" />
+                <ScalarProperty Name="TC_NombreMascota" ColumnName="TC_NombreMascota" />
+                <ScalarProperty Name="TC_DscDiagnostico" ColumnName="TC_DscDiagnostico" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MostrarMascotas" FunctionName="VETModelo.Store.MostrarMascotas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.MostrarMascotas_Result">
+                <ScalarProperty Name="TN_IdMascota" ColumnName="TN_IdMascota" />
+                <ScalarProperty Name="TC_NombreMascota" ColumnName="TC_NombreMascota" />
+                <ScalarProperty Name="TN_IdCliente" ColumnName="TN_IdCliente" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="VETModelo.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="VETModelo.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="VETModelo.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="VETModelo.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="VETModelo.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VETModelo.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="VETModelo.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="VETModelo.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
