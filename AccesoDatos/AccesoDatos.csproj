@@ -52,10 +52,12 @@
   <ItemGroup>
     <Compile Include="Implementacion\TVET_CitasAD.cs" />
     <Compile Include="Implementacion\TVET_DetalleMascotaAD.cs" />
+    <Compile Include="Implementacion\TVET_DiagnosticoAD.cs" />
     <Compile Include="Implementacion\TVET_MascotasAD.cs" />
     <Compile Include="Implementacion\TVE_ClientesAD.cs" />
     <Compile Include="Interfaces\ITVET_CitasAD.cs" />
     <Compile Include="Interfaces\ITVET_DetalleMascotaAD.cs" />
+    <Compile Include="Interfaces\ITVET_DiagnosticoAD.cs" />
     <Compile Include="Interfaces\ITVET_MascotasAD.cs" />
     <Compile Include="Interfaces\ITVE_ClientesAD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
